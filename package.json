@@ -16,6 +16,7 @@
     "@nestjs/testing": "^4.5.5",
     "@nestjs/websockets": "^4.5.8",
     "@types/maxmind": "^2.0.2",
+    "@types/object-assign": "^4.0.30",
     "@types/redis": "^2.8.5",
     "maxmind": "^2.4.0",
     "redis": "^2.8.0",

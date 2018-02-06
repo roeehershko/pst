@@ -1,15 +1,17 @@
 import {MiddlewaresConsumer, Module, NestModule, RequestMethod} from '@nestjs/common';
 import {AppController} from './app.controller';
-import {SessionService} from "./components/session";
+import {SessionService} from "./components/session.service";
 import {TrackerMiddleware} from "./middleware/tracker.middleware";
-import {MaxmindService} from "./components/maxmind";
+import {MaxmindService} from "./components/maxmind.service";
+import {RedisProvider} from "./providers/redis.provider";
 
 @Module({
     imports: [],
     controllers: [AppController],
     components: [
+        RedisProvider,
         SessionService,
-        MaxmindService
+        MaxmindService,
     ],
 })
 export class ApplicationModule implements NestModule {
@@ -19,7 +21,8 @@ export class ApplicationModule implements NestModule {
         // Apply tracker middleware
         consumer.apply(TrackerMiddleware).forRoutes(
             {path: '/', method: RequestMethod.GET},
-            {path: '/postback', method: RequestMethod.POST},
+            {path: '/convert', method: RequestMethod.GET},
+            {path: '/convert', method: RequestMethod.POST}
         );
     }
 }

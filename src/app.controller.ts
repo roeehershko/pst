@@ -1,25 +1,22 @@
-import {Get, Controller, Request, Body, Query} from '@nestjs/common';
-import {PostbackResponse} from "./interfaces/PostbackResponse";
-import {SessionService} from "./components/session";
-import {Response} from "maxmind";
-import {TrackingBodyDto, TrackingQueryDto} from "./interfaces/TrackingBodyDto";
+import {Get, Controller, Request, Body, Query, Post} from '@nestjs/common';
+import {SessionService} from "./components/session.service";
+import {TrackingBodyDto, TrackingQueryDto} from "./interfaces/Tracking.dto";
 
 @Controller()
 export class AppController {
 
-    constructor(private readonly sessionService: SessionService) {
+    constructor(private readonly sessionService: SessionService) {}
 
-    }
     /**
-     *
+     * Receive postback
      * @returns {string}
      */
-    @Get()
+    @Get('/convert')
     root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
         this.sessionService.logSession(data, query);
         return {
-            city: data.geo,
-            status: 1
+            status: 1,
+            message: 'queued'
         }
     }
 }
