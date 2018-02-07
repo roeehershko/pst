@@ -1,7 +1,7 @@
 import {RedisClient} from "redis";
 
 export const RedisProvider = {
-    provide: 'TestToken',
+    provide: 'RedisToken',
     useFactory: async () => {
         return new Promise((resolve, reject) => {
             let redisClient = new RedisClient({

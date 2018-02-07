@@ -12,6 +12,15 @@ export class AppController {
      * @returns {string}
      */
     @Get('/convert')
+    convert(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
+        this.sessionService.logSession(data, query);
+        return {
+            status: 1,
+            message: 'queued'
+        }
+    }
+
+    @Get('/')
     root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
         this.sessionService.logSession(data, query);
         return {

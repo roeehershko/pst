@@ -7,15 +7,12 @@ export class SessionService {
 
     private redisClient: RedisClient;
 
-    constructor(@Inject('TestToken') redisClient: RedisClient) {
+    constructor(@Inject('RedisToken') redisClient: RedisClient) {
         let self = this;
         this.redisClient = redisClient;
-        setInterval(function () {
-            self.debugInterval();
-        }, 3000);
     }
 
-    public logSession(body: TrackingBodyDto, query) {
+    public logSession(body: TrackingBodyDto, query: TrackingQueryDto) {
 
         let data: TrackingSession = Object.assign(query, {
             ip: body.ip,
@@ -23,7 +20,7 @@ export class SessionService {
             city: body.geo.city.names.en
         });
 
-        this.redisClient.lpush('sessions', JSON.stringify(query));
+        this.redisClient.lpush('sessions', JSON.stringify(data));
     }
 
     public debugInterval() {
