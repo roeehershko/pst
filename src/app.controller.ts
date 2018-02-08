@@ -13,7 +13,7 @@ export class AppController {
      */
     @Get('/convert')
     convert(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
-        this.sessionService.logSession(data, query);
+        this.sessionService.create(data, query);
         return {
             status: 1,
             message: 'queued'
@@ -22,7 +22,7 @@ export class AppController {
 
     @Get('/')
     root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
-        this.sessionService.logSession(data, query);
+        this.sessionService.create(data, query);
         return {
             status: 1,
             message: 'queued'

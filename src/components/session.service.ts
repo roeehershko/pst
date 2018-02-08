@@ -8,11 +8,10 @@ export class SessionService {
     private redisClient: RedisClient;
 
     constructor(@Inject('RedisToken') redisClient: RedisClient) {
-        let self = this;
         this.redisClient = redisClient;
     }
 
-    public logSession(body: TrackingBodyDto, query: TrackingQueryDto) {
+    public create(body: TrackingBodyDto, query: TrackingQueryDto) {
 
         let data: TrackingSession = Object.assign(query, {
             ip: body.ip,
@@ -21,13 +20,5 @@ export class SessionService {
         });
 
         this.redisClient.lpush('sessions', JSON.stringify(data));
-    }
-
-    public debugInterval() {
-        let self = this;
-        this.redisClient.lrange('sessions', 0, -1, function (err, data) {
-            console.log(data);
-            self.redisClient.del('sessions');
-        });
     }
 }
