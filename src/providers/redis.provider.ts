@@ -5,7 +5,7 @@ export const RedisProvider = {
     useFactory: async () => {
         return new Promise((resolve, reject) => {
             let redisClient = new RedisClient({
-                host: 'localhost'
+                host: 'redis'
             });
 
             redisClient.on('ready', function () {

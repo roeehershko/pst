@@ -16,11 +16,15 @@ export class TrackerMiddleware implements NestMiddleware {
             // Extract the user Agent
             let ua = req.headers['user-agent'];
 
-            // Extract user IP Address from the request, adding fallback to locals
-            let ipAddress = req.headers['http_cf_connecting_ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            if (ipAddress == '::1') ipAddress = '82.81.229.162';
 
-            this.maxmindService.get(ipAddress);
+            // Extract user IP Address from the request
+            let ipAddress = req.headers['http_cf_connecting_ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+            // Remove IPV6 prefix
+            ipAddress = ipAddress.replace('::ffff:', '');
+
+            // adding fallback to development
+            if (ipAddress == '172.18.0.1') ipAddress = '82.81.229.162';
 
             // Extract server params into the request body
             req.body = {

@@ -12,7 +12,6 @@ export class SessionService {
     }
 
     public create(body: TrackingBodyDto, query: TrackingQueryDto) {
-
         let data: TrackingSession = Object.assign(query, {
             ip: body.ip,
             country: body.geo.country.iso_code,

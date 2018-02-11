@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  nginx:
+    build: nginx
+    networks:
+      - steer
+    ports:
+      - 80:80
+  app:
+     build: ./
+     command: nodemon -L /app/index.js
+     volumes:
+       - ./:/app
+     networks:
+       - steer
+     ports:
+       - 3000:3000
+     environment:
+       NODE_ENV: development
+  redis:
+    image: redis
+    networks:
+      - steer
+volumes:
+    mongodbdata:
+networks:
+  steer:
