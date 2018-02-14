@@ -6,8 +6,7 @@ import {Client, ClientProxy, Transport} from "@nestjs/microservices";
 export class SessionJob {
 
     private redisClient: RedisClient;
-
-    @Client({ transport: Transport.TCP, port: 5667, host: 'sessions.app' })
+    @Client({ transport: Transport.REDIS, url: 'redis://gateway:6379' })
     client: ClientProxy;
 
     constructor(@Inject('RedisToken') redisClient: RedisClient) {
@@ -17,19 +16,22 @@ export class SessionJob {
     public async startJob() {
         const self = this;
         setTimeout(async function () {
-            await self.process.apply(self);
-            self.startJob();
+            self.process.apply(self, [function () {
+                self.startJob.apply(self);
+            }]);
         }, 2000);
     }
 
-    private async process() {
+    private process(cb) {
         const self = this;
-        const pattern = { cmd: 'sessions' };
         this.redisClient.lrange('sessions', 0, 1000, function (err, data) {
-            // Process
-            self.redisClient.ltrim('sessions', 1000, -1);
-        });
+            // Sending data to the sessions service
+            self.client.send<Object[]>("sessions", data).subscribe();
+            // remove sent data
+            self.redisClient.ltrim('sessions', data.length, -1, function () {
+                cb();
+            });
 
-        return this.client.send<Object[]>(pattern, []);
+        });
     }
 }

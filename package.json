@@ -15,6 +15,7 @@
     "@nestjs/microservices": "^4.5.8",
     "@nestjs/testing": "^4.5.5",
     "@nestjs/websockets": "^4.5.8",
+    "aguid": "^2.0.0",
     "maxmind": "^2.4.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.12",

@@ -24,7 +24,7 @@ export class TrackerMiddleware implements NestMiddleware {
             ipAddress = ipAddress.replace('::ffff:', '');
 
             // adding fallback to development
-            if (ipAddress == '172.18.0.1') ipAddress = '82.81.229.162';
+            if (process.env.NODE_ENV === 'development') ipAddress = '82.81.229.162';
 
             // Extract server params into the request body
             req.body = {

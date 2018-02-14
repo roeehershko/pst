@@ -1,11 +1,13 @@
-import {Get, Controller, Request, Body, Query, Post} from '@nestjs/common';
+import {Get, Controller, Request, Body, Query, Post, Res, Response} from '@nestjs/common';
 import {SessionService} from "./components/session.service";
 import {TrackingBodyDto, TrackingQueryDto} from "./interfaces/Tracking.dto";
+import {MessagePattern} from "@nestjs/microservices";
+import {SplitterService} from "./components/splitter.service";
 
 @Controller()
 export class AppController {
 
-    constructor(private readonly sessionService: SessionService) {}
+    constructor(private readonly sessionService: SessionService, private readonly splitter: SplitterService) {}
 
     /**
      * Receive postback
@@ -21,11 +23,22 @@ export class AppController {
     }
 
     @Get('/')
-    root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
+    async root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto, @Response() res) {
+
         this.sessionService.create(data, query);
-        return {
-            status: 1,
-            message: 'queued'
+        let split = await this.splitter.split(data, query);
+
+        if (split) {
+            return res.redirect(split);
+        }
+        else {
+            res.send({
+                status: 0,
+                message: 'Invalid campaign or landers'
+            });
+
+            return res.end();
         }
     }
+
 }
