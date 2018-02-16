@@ -1,4 +1,4 @@
-import {Get, Controller, Request, Body, Query, Post, Res, Response} from '@nestjs/common';
+import {Get, Controller, Request, Body, Query, Post, Res, Response, Headers} from '@nestjs/common';
 import {SessionService} from "./components/session.service";
 import {TrackingBodyDto, TrackingQueryDto} from "./interfaces/Tracking.dto";
 import {MessagePattern} from "@nestjs/microservices";
@@ -14,8 +14,9 @@ export class AppController {
      * @returns {string}
      */
     @Get('/convert')
-    convert(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto) {
-        this.sessionService.create(data, query);
+    convert(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto, @Headers('referer') ref) {
+        this.sessionService.create(data, query, ref);
+
         return {
             status: 1,
             message: 'queued'
@@ -23,9 +24,9 @@ export class AppController {
     }
 
     @Get('/')
-    async root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto, @Response() res) {
+    async root(@Body() data: TrackingBodyDto, @Query() query: TrackingQueryDto, @Response() res, @Headers('referer') ref) {
 
-        this.sessionService.create(data, query);
+        this.sessionService.create(data, query, ref);
         let split = await this.splitter.split(data, query);
 
         if (split) {

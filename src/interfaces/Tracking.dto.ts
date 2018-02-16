@@ -7,7 +7,7 @@ export interface TrackingBodyDto {
 }
 
 export interface TrackingQueryDto {
-    campaign: number,
+    campaign: [number, string],
     goal: string,
     source: string,
     [k: string]: any
