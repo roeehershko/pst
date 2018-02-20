@@ -19,19 +19,18 @@ export class SessionJob {
             self.process.apply(self, [function () {
                 self.startJob.apply(self);
             }]);
-        }, 2000);
+        }, 10000);
     }
 
     private process(cb) {
         const self = this;
         this.redisClient.lrange('sessions', 0, 1000, function (err, data) {
             // Sending data to the sessions service
-            self.client.send<Object[]>("sessions", data).subscribe();
+            self.client.send<Object[]>("sessions", data).subscribe().unsubscribe();
             // remove sent data
             self.redisClient.ltrim('sessions', data.length, -1, function () {
                 cb();
             });
-
         });
     }
 }

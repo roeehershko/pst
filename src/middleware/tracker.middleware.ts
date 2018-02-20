@@ -33,24 +33,11 @@ export class TrackerMiddleware implements NestMiddleware {
                 geo: this.maxmindService.get(ipAddress)
             };
 
-            // TODO.remove this shit
-            if (req.query.c === 'test') {
-                req.query.campaign = 61;
-                req.query.goal = 'install';
-
-                delete req.query.c;
-                delete req.query.g;
-            }
 
             // Replace short parameters with full names
             if (req.query.c) {
                 req.query.campaign = parseInt(req.query.c);
                 delete req.query.c;
-            }
-
-            if ( ! req.query.c && ! req.query.campaign && req.query.guid) {
-                req.query.campaign = 61;
-                req.query.goal = 'install';
             }
 
             if (req.query.g || req.query.e) {

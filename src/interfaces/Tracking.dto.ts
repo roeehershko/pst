@@ -17,7 +17,7 @@ export interface TrackingSession {
     ip: string,
     country: string,
     city: string,
-    campaign: number,
+    campaign: [number, string],
     goal: string,
     source: string,
     [k: string]: any

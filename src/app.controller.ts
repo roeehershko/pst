@@ -3,11 +3,16 @@ import {SessionService} from "./components/session.service";
 import {TrackingBodyDto, TrackingQueryDto} from "./interfaces/Tracking.dto";
 import {MessagePattern} from "@nestjs/microservices";
 import {SplitterService} from "./components/splitter.service";
+import {CampaignsService} from "./components/campaigns.service";
 
 @Controller()
 export class AppController {
 
-    constructor(private readonly sessionService: SessionService, private readonly splitter: SplitterService) {}
+    constructor(
+        private readonly sessionService: SessionService,
+        private readonly splitter: SplitterService,
+        private readonly campaignService: CampaignsService,
+    ) {}
 
     /**
      * Receive postback
@@ -42,4 +47,8 @@ export class AppController {
         }
     }
 
+    @MessagePattern('campaigns.updated')
+    async campaignsUpdated(data) {
+        this.campaignService.store(data);
+    }
 }

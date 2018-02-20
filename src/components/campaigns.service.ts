@@ -3,24 +3,18 @@ import {Client, ClientProxy, Transport} from "@nestjs/microservices";
 import {RedisClient} from "redis";
 
 @Component()
-export class CampaignsSyncService {
-
-    private redisClient: RedisClient;
+export class CampaignsService {
 
     @Client({ transport: Transport.REDIS, url: 'redis://gateway:6379' })
     client: ClientProxy;
+
+    private redisClient: RedisClient;
 
     constructor(@Inject('RedisToken') redisClient: RedisClient) {
         this.redisClient = redisClient;
     }
 
-
-    sync() {
-        const self = this;
-        let obs = this.client.send('campaigns', {a: 'b'});
-        let sub = obs.subscribe(function (data) {
-            self.redisClient.set('campaigns', JSON.stringify(data));
-            sub.unsubscribe();
-        });
+    store(campaigns) {
+        this.redisClient.set('campaigns', JSON.stringify(campaigns));
     }
 }
