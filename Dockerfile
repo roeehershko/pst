@@ -23,5 +23,7 @@ ADD . /app
 # Expose port
 EXPOSE  3000
 
+RUN npm run prestart:prod
+
 # Run app using nodemon
-CMD ["npm", "run", "start:watch"]
+CMD ["npm", "run", "start:prod"]
