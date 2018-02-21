@@ -47,6 +47,11 @@ export class AppController {
         }
     }
 
+    @Get('/loaderio-150104fb1a0f642e2a5e230e57626746')
+    async loaderio() {
+        return 'loaderio-150104fb1a0f642e2a5e230e57626746/';
+    }
+
     @MessagePattern('campaigns.updated')
     async campaignsUpdated(data) {
         this.campaignService.store(data);
