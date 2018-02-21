@@ -14,7 +14,7 @@ ADD ./package.json /tmp/package.json
 RUN cd /tmp && yarn
 RUN mkdir -p /app && cp -a /tmp/node_modules /app/
 
-ENV NODE_ENV "development"
+ENV NODE_ENV "production"
 
 # Define working directory
 WORKDIR /app
